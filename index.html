@@ -348,9 +348,10 @@
       <div class="r-one" id="rOne"></div>
     </div>
     <div class="r-card"><h3>성향 분석 그래프</h3><div id="rBars"></div></div>
-    <div style="text-align:center;padding:4px 0 8px">
-      <span style="font-size:11px;color:#8B95A1;font-weight:500;letter-spacing:.5px">https://tryme.im</span>
-    </div>
+    <div id="captureWatermark" style="text-align:center;padding:20px 0 12px">
+  <img src="https://bdsm.tryme.im/logo.png" alt="tryme" style="height:24px;opacity:0.7">
+</div>
+
   </div>
 
   <button class="btn-guide" onclick="openModal()">📖 SEX MBTI 알아보기</button>
@@ -673,15 +674,17 @@ async function share(){
           el.style.cssText='font-size:11px;color:#FF6B35;margin-top:2px;font-weight:500;text-align:'+(isLeft?'left':'right')+';';
         });
 
-        /* ── 워터마크 ── */
-        c.querySelectorAll('span').forEach(sp=>{
-          if(sp.textContent.includes('sexmbti')){
-            sp.parentElement.style.cssText='text-align:center;padding:4px 0 8px;width:100%;';
-            sp.style.cssText='font-size:11px;color:#8B95A1;font-weight:500;letter-spacing:.3px;';
-          }
-        });
-      }
-    });
+        /* ── 워터마크 (로고 이미지) ── */
+const wm = c.querySelector('#captureWatermark');
+if (wm) {
+  wm.style.cssText = 'text-align:center;padding:20px 0 12px;width:100%;box-sizing:border-box;';
+  const wmImg = wm.querySelector('img');
+  if (wmImg) {
+    wmImg.style.cssText = 'height:24px;opacity:0.7;display:inline-block;';
+    wmImg.setAttribute('crossorigin', 'anonymous');
+  }
+}
+
 
     /* ── 이미지 생성 및 공유/다운로드 ── */
     const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
