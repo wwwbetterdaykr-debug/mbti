@@ -538,132 +538,205 @@ function showR(type,p,strength){
 }
 
 /* ✅ 수정: share() 함수 — 이미지 캡처 + 네이티브 공유 */
+/* ✅ 최종 수정: share() 함수 — onclone 방식으로 완벽 중앙 정렬 */
 async function share(){
-  const btn=document.getElementById('shareBtn');
-  const origText=btn.textContent;
-  btn.textContent='이미지 생성 중...';
-  btn.disabled=true;
+  const btn = document.getElementById('shareBtn');
+  const origText = btn.textContent;
+  btn.textContent = '이미지 생성 중...';
+  btn.disabled = true;
 
-  const area=document.getElementById('captureArea');
-  const origParent=area.parentNode;
-  const origNext=area.nextSibling;
+  try {
+    const area = document.getElementById('captureArea');
+    const W = 460;
+    const PAD = 24;
 
-  try{
-    /* ── 1. 캡처용 스타일 인라인 치환 ── */
-    const saved=[];
+    /* ── html2canvas onclone에서 모든 스타일 보정 ── */
+    const canvas = await html2canvas(area, {
+      scale: 2,
+      backgroundColor: '#FAFAFA',
+      useCORS: true,
+      logging: false,
+      width: W,
+      windowWidth: W,
+      scrollX: 0,
+      scrollY: 0,
+      x: 0,
+      y: 0,
+      onclone: function(clonedDoc) {
+        const c = clonedDoc.getElementById('captureArea');
 
-    // r-code 그라디언트 → 단색
-    const codeEl=document.getElementById('rCode');
-    const codeOrig=codeEl.style.cssText;
-    codeEl.style.cssText='font-size:48px;font-weight:900;letter-spacing:-2px;color:#FF6B35;-webkit-text-fill-color:#FF6B35;background:none;line-height:1.1;margin-bottom:6px;';
-    saved.push(()=>codeEl.style.cssText=codeOrig);
+        /* ── 루트 캡처 영역: body 최상단에 고정, 정확히 460px ── */
+        c.style.cssText = [
+          'position:fixed',
+          'left:0',
+          'top:0',
+          'width:' + W + 'px',
+          'max-width:' + W + 'px',
+          'min-width:' + W + 'px',
+          'margin:0',
+          'padding:28px ' + PAD + 'px 16px ' + PAD + 'px',
+          'background:#FAFAFA',
+          'box-sizing:border-box',
+          'z-index:99999',
+          'overflow:hidden'
+        ].join(';');
 
-    // r-badge
-    const badge=area.querySelector('.r-badge');
-    if(badge){const o=badge.style.cssText;badge.style.cssText='display:inline-flex;font-size:11px;font-weight:600;color:#FF6B35;background:#FFF4EF;padding:4px 11px;border-radius:100px;margin-bottom:12px;letter-spacing:.5px;';saved.push(()=>badge.style.cssText=o);}
+        /* 부모 container의 padding 영향 제거 */
+        let parent = c.parentElement;
+        while(parent && parent !== clonedDoc.body) {
+          parent.style.padding = '0';
+          parent.style.margin = '0';
+          parent.style.maxWidth = 'none';
+          parent.style.width = '100%';
+          parent = parent.parentElement;
+        }
 
-    // r-card
-    area.querySelectorAll('.r-card').forEach(c=>{const o=c.style.cssText;c.style.cssText='background:#FFFFFF;border:1px solid #E5E8EB;border-radius:16px;padding:20px;margin-bottom:12px;';saved.push(()=>c.style.cssText=o);});
+        /* ── result-header 중앙 정렬 ── */
+        const header = c.querySelector('.result-header');
+        if(header) {
+          header.style.cssText = 'text-align:center;padding-top:32px;margin-bottom:24px;width:100%;';
+        }
 
-    // r-name 색상
-    const nameEl=document.getElementById('rName');
-    if(nameEl){const o=nameEl.style.cssText;nameEl.style.color='#191F28';saved.push(()=>nameEl.style.cssText=o);}
+        /* ── r-badge ── */
+        const badge = c.querySelector('.r-badge');
+        if(badge) {
+          badge.style.cssText = 'display:inline-flex;font-size:11px;font-weight:600;color:#FF6B35;background:#FFF4EF;padding:4px 11px;border-radius:100px;margin-bottom:12px;letter-spacing:.5px;';
+        }
 
-    // r-one 색상
-    const oneEl=document.getElementById('rOne');
-    if(oneEl){const o=oneEl.style.cssText;oneEl.style.color='#4E5968';saved.push(()=>oneEl.style.cssText=o);}
+        /* ── r-code: 그라디언트 → 단색 (html2canvas 호환) ── */
+        const codeEl = c.querySelector('#rCode') || c.querySelector('.r-code');
+        if(codeEl) {
+          codeEl.style.cssText = 'font-size:48px;font-weight:900;letter-spacing:-2px;color:#FF6B35;-webkit-text-fill-color:#FF6B35;background:none;-webkit-background-clip:unset;background-clip:unset;line-height:1.1;margin-bottom:6px;text-align:center;';
+        }
 
-    // rb-track
-    area.querySelectorAll('.rb-track').forEach(t=>{const o=t.style.cssText;t.style.cssText='position:relative;width:100%;height:8px;background:#F2F4F6;border-radius:100px;overflow:hidden;';saved.push(()=>t.style.cssText=o);});
+        /* ── r-name ── */
+        const nameEl = c.querySelector('#rName') || c.querySelector('.r-name');
+        if(nameEl) {
+          nameEl.style.cssText = 'font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:10px;color:#191F28;text-align:center;';
+        }
 
-    // rb-fill
-    const fillColors={'f-ei':'#FF6B35','f-ei-r':'#6366F1','f-sn':'#F43F5E','f-sn-r':'#8B5CF6','f-tf':'#8B5CF6','f-tf-r':'#EC4899','f-jp':'#10B981','f-jp-r':'#F59E0B'};
-    area.querySelectorAll('.rb-fill').forEach(f=>{
-      const o=f.style.cssText;
-      const w=f.style.width||f.dataset.t+'%';
-      const isRight=f.classList.contains('from-right');
-      let bg='#FF6B35';
-      for(const cls in fillColors){if(f.classList.contains(cls)){bg=fillColors[cls];break;}}
-      f.style.cssText='position:absolute;top:0;height:100%;border-radius:100px;width:'+w+';background:'+bg+';'+(isRight?'right:0;':'left:0;');
-      saved.push(()=>f.style.cssText=o);
+        /* ── r-one ── */
+        const oneEl = c.querySelector('#rOne') || c.querySelector('.r-one');
+        if(oneEl) {
+          oneEl.style.cssText = 'font-size:14px;color:#4E5968;line-height:1.7;word-break:keep-all;text-align:center;';
+        }
+
+        /* ── r-card: 전체 너비 사용 ── */
+        c.querySelectorAll('.r-card').forEach(card => {
+          card.style.cssText = 'background:#FFFFFF;border:1px solid #E5E8EB;border-radius:16px;padding:20px;margin-bottom:12px;width:100%;box-sizing:border-box;';
+        });
+
+        /* ── r-card h3 ── */
+        c.querySelectorAll('.r-card h3').forEach(h => {
+          h.style.cssText = 'font-size:14px;font-weight:700;margin-bottom:14px;color:#191F28;';
+        });
+
+        /* ── rb-item ── */
+        c.querySelectorAll('.rb-item').forEach(item => {
+          item.style.width = '100%';
+          item.style.boxSizing = 'border-box';
+        });
+
+        /* ── rb-labels ── */
+        c.querySelectorAll('.rb-labels').forEach(lb => {
+          lb.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:5px;font-size:12.5px;font-weight:700;width:100%;';
+        });
+
+        c.querySelectorAll('.rb-l').forEach(el => {
+          const isWin = el.closest('.rb-item') && el.closest('.rb-item').classList.contains('left-win');
+          el.style.color = isWin ? '#191F28' : '#8B95A1';
+          el.style.fontWeight = isWin ? '700' : '500';
+        });
+        c.querySelectorAll('.rb-r').forEach(el => {
+          const isWin = el.closest('.rb-item') && el.closest('.rb-item').classList.contains('right-win');
+          el.style.color = isWin ? '#191F28' : '#8B95A1';
+          el.style.fontWeight = isWin ? '700' : '500';
+        });
+
+        /* ── rb-track: 전체 너비 ── */
+        c.querySelectorAll('.rb-track').forEach(t => {
+          t.style.cssText = 'position:relative;width:100%;height:8px;background:#F2F4F6;border-radius:100px;overflow:hidden;box-sizing:border-box;';
+        });
+
+        /* ── rb-fill: 색상 인라인 ── */
+        const fillColors = {
+          'f-ei':'#FF6B35','f-ei-r':'#6366F1',
+          'f-sn':'#F43F5E','f-sn-r':'#8B5CF6',
+          'f-tf':'#8B5CF6','f-tf-r':'#EC4899',
+          'f-jp':'#10B981','f-jp-r':'#F59E0B'
+        };
+        c.querySelectorAll('.rb-fill').forEach(f => {
+          const w = f.style.width || f.dataset.t + '%';
+          const isRight = f.classList.contains('from-right');
+          let bg = '#FF6B35';
+          for(const cls in fillColors) {
+            if(f.classList.contains(cls)) { bg = fillColors[cls]; break; }
+          }
+          f.style.cssText = 'position:absolute;top:0;height:100%;border-radius:100px;width:' + w + ';background:' + bg + ';' + (isRight ? 'right:0;' : 'left:0;');
+        });
+
+        /* ── rb-pct ── */
+        c.querySelectorAll('.rb-pct').forEach(el => {
+          el.style.color = '#4E5968';
+        });
+
+        /* ── rb-note ── */
+        c.querySelectorAll('.rb-note').forEach(el => {
+          el.style.color = '#FF6B35';
+        });
+
+        /* ── 워터마크 영역 중앙 정렬 ── */
+        const watermarks = c.querySelectorAll('div[style*="text-align:center"]');
+        watermarks.forEach(wm => {
+          wm.style.textAlign = 'center';
+          wm.style.width = '100%';
+        });
+      }
     });
 
-    // rb-labels
-    area.querySelectorAll('.rb-l').forEach(el=>{const o=el.style.cssText;el.style.color=el.closest('.rb-item').classList.contains('left-win')?'#191F28':'#8B95A1';saved.push(()=>el.style.cssText=o);});
-    area.querySelectorAll('.rb-r').forEach(el=>{const o=el.style.cssText;el.style.color=el.closest('.rb-item').classList.contains('right-win')?'#191F28':'#8B95A1';saved.push(()=>el.style.cssText=o);});
+    /* ── 이미지 생성 및 공유/다운로드 ── */
+    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
+    const file = new File([blob], 'sex-mbti-result.png', {type:'image/png'});
 
-    // rb-pct, rb-note
-    area.querySelectorAll('.rb-pct').forEach(el=>{const o=el.style.cssText;el.style.color='#4E5968';saved.push(()=>el.style.cssText=o);});
-    area.querySelectorAll('.rb-note').forEach(el=>{const o=el.style.cssText;el.style.color='#FF6B35';saved.push(()=>el.style.cssText=o);});
+    const code = document.getElementById('rCode').textContent;
+    const name = document.getElementById('rName').textContent;
+    const text = '나의 SEX MBTI는 ' + code + ' ' + name + '!\n성심리학 이론 기반으로 분석된 나의 친밀한 성향 🔬';
 
-    // h3 inside r-card
-    area.querySelectorAll('.r-card h3').forEach(el=>{const o=el.style.cssText;el.style.color='#191F28';saved.push(()=>el.style.cssText=o);});
-
-    /* ── 2. 요소를 body로 이동 + 고정 배치 ── */
-    const W=460;
-    const areaOrig=area.style.cssText;
-    document.body.appendChild(area);
-    area.style.cssText='position:fixed;left:0;top:0;width:'+W+'px;padding:28px 24px 16px 24px;background:#FAFAFA;z-index:99999;';
-
-    /* ── 3. html2canvas ── */
-    const canvas=await html2canvas(area,{
-      scale:2,
-      backgroundColor:'#FAFAFA',
-      useCORS:true,
-      logging:false,
-      width:W,
-      height:area.scrollHeight,
-      windowWidth:W,
-      x:0,
-      y:0,
-      scrollX:0,
-      scrollY:0
-    });
-
-    /* ── 4. 원위치 복원 ── */
-    area.style.cssText=areaOrig;
-    if(origNext) origParent.insertBefore(area,origNext);
-    else origParent.appendChild(area);
-    saved.forEach(fn=>fn());
-
-    /* ── 5. 이미지 공유/다운로드 ── */
-    const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
-    const file=new File([blob],'sex-mbti-result.png',{type:'image/png'});
-    const code=document.getElementById('rCode').textContent;
-    const name=document.getElementById('rName').textContent;
-    const text='나의 SEX MBTI는 '+code+' '+name+'!\n성심리학 이론 기반으로 분석된 나의 친밀한 성향 🔬';
-
-    if(navigator.canShare&&navigator.canShare({files:[file]})){
-      await navigator.share({title:'SEX MBTI',text:text,files:[file]});
-    }else if(navigator.share){
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({title:'SEX MBTI', text:text, files:[file]});
+    } else if(navigator.share){
       downloadImage(canvas);
-      await navigator.share({title:'SEX MBTI',text:text,url:location.href});
-    }else{
+      await navigator.share({title:'SEX MBTI', text:text, url:location.href});
+    } else {
       downloadImage(canvas);
       alert('결과 이미지가 저장되었습니다!');
     }
 
-  }catch(e){
-    // 에러 시 원위치 복원
-    area.style.cssText='';
-    if(!document.getElementById('captureArea')){
-      if(origNext) origParent.insertBefore(area,origNext);
-      else origParent.appendChild(area);
-    }
-    if(e.name!=='AbortError'){
-      try{
-        const canvas=await html2canvas(area,{scale:2,backgroundColor:'#FAFAFA',useCORS:true,logging:false});
-        downloadImage(canvas);
+  } catch(e) {
+    if(e.name !== 'AbortError'){
+      try {
+        const fallbackCanvas = await html2canvas(document.getElementById('captureArea'), {
+          scale: 2, backgroundColor:'#FAFAFA', useCORS:true, logging:false
+        });
+        downloadImage(fallbackCanvas);
         alert('결과 이미지가 저장되었습니다!');
-      }catch(e2){
+      } catch(e2) {
         alert('이미지 생성에 실패했습니다. 스크린샷을 이용해주세요.');
       }
     }
-  }finally{
-    btn.textContent=origText;
-    btn.disabled=false;
+  } finally {
+    btn.textContent = origText;
+    btn.disabled = false;
   }
 }
+
+function downloadImage(canvas){
+  const link = document.createElement('a');
+  link.download = 'sex-mbti-result.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+
 
 
 
