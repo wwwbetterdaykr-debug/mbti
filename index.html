@@ -544,16 +544,15 @@ async function share(){
   btn.textContent='이미지 생성 중...';
   btn.disabled=true;
 
+  const area=document.getElementById('captureArea');
+  const origParent=area.parentNode;
+  const origNext=area.nextSibling;
+
   try{
-    const area=document.getElementById('captureArea');
+    /* ── 1. 캡처용 스타일 인라인 치환 ── */
     const saved=[];
 
-    // captureArea 배경 — 좌우 패딩 균등, 중앙 정렬
-    const areaOrig=area.style.cssText;
-    area.style.cssText='background:#FAFAFA;padding:20px 24px 12px 24px;width:100%;max-width:460px;margin:0 auto;';
-    saved.push(()=>area.style.cssText=areaOrig);
-
-    // r-code 그라디언트 텍스트 → 단색
+    // r-code 그라디언트 → 단색
     const codeEl=document.getElementById('rCode');
     const codeOrig=codeEl.style.cssText;
     codeEl.style.cssText='font-size:48px;font-weight:900;letter-spacing:-2px;color:#FF6B35;-webkit-text-fill-color:#FF6B35;background:none;line-height:1.1;margin-bottom:6px;';
@@ -566,16 +565,19 @@ async function share(){
     // r-card
     area.querySelectorAll('.r-card').forEach(c=>{const o=c.style.cssText;c.style.cssText='background:#FFFFFF;border:1px solid #E5E8EB;border-radius:16px;padding:20px;margin-bottom:12px;';saved.push(()=>c.style.cssText=o);});
 
+    // r-name 색상
+    const nameEl=document.getElementById('rName');
+    if(nameEl){const o=nameEl.style.cssText;nameEl.style.color='#191F28';saved.push(()=>nameEl.style.cssText=o);}
+
+    // r-one 색상
+    const oneEl=document.getElementById('rOne');
+    if(oneEl){const o=oneEl.style.cssText;oneEl.style.color='#4E5968';saved.push(()=>oneEl.style.cssText=o);}
+
     // rb-track
     area.querySelectorAll('.rb-track').forEach(t=>{const o=t.style.cssText;t.style.cssText='position:relative;width:100%;height:8px;background:#F2F4F6;border-radius:100px;overflow:hidden;';saved.push(()=>t.style.cssText=o);});
 
     // rb-fill
-    const fillColors={
-      'f-ei':'#FF6B35','f-ei-r':'#6366F1',
-      'f-sn':'#F43F5E','f-sn-r':'#8B5CF6',
-      'f-tf':'#8B5CF6','f-tf-r':'#EC4899',
-      'f-jp':'#10B981','f-jp-r':'#F59E0B'
-    };
+    const fillColors={'f-ei':'#FF6B35','f-ei-r':'#6366F1','f-sn':'#F43F5E','f-sn-r':'#8B5CF6','f-tf':'#8B5CF6','f-tf-r':'#EC4899','f-jp':'#10B981','f-jp-r':'#F59E0B'};
     area.querySelectorAll('.rb-fill').forEach(f=>{
       const o=f.style.cssText;
       const w=f.style.width||f.dataset.t+'%';
@@ -586,56 +588,47 @@ async function share(){
       saved.push(()=>f.style.cssText=o);
     });
 
-    // rb-labels 색상
-    area.querySelectorAll('.rb-l').forEach(el=>{
-      const o=el.style.cssText;
-      const isWin=el.closest('.rb-item').classList.contains('left-win');
-      el.style.color=isWin?'#191F28':'#8B95A1';
-      saved.push(()=>el.style.cssText=o);
-    });
-    area.querySelectorAll('.rb-r').forEach(el=>{
-      const o=el.style.cssText;
-      const isWin=el.closest('.rb-item').classList.contains('right-win');
-      el.style.color=isWin?'#191F28':'#8B95A1';
-      saved.push(()=>el.style.cssText=o);
-    });
+    // rb-labels
+    area.querySelectorAll('.rb-l').forEach(el=>{const o=el.style.cssText;el.style.color=el.closest('.rb-item').classList.contains('left-win')?'#191F28':'#8B95A1';saved.push(()=>el.style.cssText=o);});
+    area.querySelectorAll('.rb-r').forEach(el=>{const o=el.style.cssText;el.style.color=el.closest('.rb-item').classList.contains('right-win')?'#191F28':'#8B95A1';saved.push(()=>el.style.cssText=o);});
 
-    // rb-pct
+    // rb-pct, rb-note
     area.querySelectorAll('.rb-pct').forEach(el=>{const o=el.style.cssText;el.style.color='#4E5968';saved.push(()=>el.style.cssText=o);});
-
-    // rb-note
     area.querySelectorAll('.rb-note').forEach(el=>{const o=el.style.cssText;el.style.color='#FF6B35';saved.push(()=>el.style.cssText=o);});
 
-    // r-one
-    const oneEl=document.getElementById('rOne');
-    if(oneEl){const o=oneEl.style.cssText;oneEl.style.color='#4E5968';saved.push(()=>oneEl.style.cssText=o);}
+    // h3 inside r-card
+    area.querySelectorAll('.r-card h3').forEach(el=>{const o=el.style.cssText;el.style.color='#191F28';saved.push(()=>el.style.cssText=o);});
 
-    /* ── html2canvas 실행 — 정확한 위치/크기 캡처 ── */
-    const captureWidth=area.scrollWidth;
+    /* ── 2. 요소를 body로 이동 + 고정 배치 ── */
+    const W=460;
+    const areaOrig=area.style.cssText;
+    document.body.appendChild(area);
+    area.style.cssText='position:fixed;left:0;top:0;width:'+W+'px;padding:28px 24px 16px 24px;background:#FAFAFA;z-index:99999;';
+
+    /* ── 3. html2canvas ── */
     const canvas=await html2canvas(area,{
       scale:2,
       backgroundColor:'#FAFAFA',
       useCORS:true,
       logging:false,
-      width:captureWidth,
-      windowWidth:captureWidth,
-      x:area.getBoundingClientRect().left+window.scrollX,
+      width:W,
+      height:area.scrollHeight,
+      windowWidth:W,
+      x:0,
+      y:0,
       scrollX:0,
-      scrollY:-window.scrollY,
-      onclone:function(clonedDoc){
-        const clonedArea=clonedDoc.getElementById('captureArea');
-        clonedArea.style.margin='0';
-        clonedArea.style.width=captureWidth+'px';
-      }
+      scrollY:0
     });
 
-    /* ── 복원 ── */
+    /* ── 4. 원위치 복원 ── */
+    area.style.cssText=areaOrig;
+    if(origNext) origParent.insertBefore(area,origNext);
+    else origParent.appendChild(area);
     saved.forEach(fn=>fn());
 
-    /* ── 이미지 생성 및 공유/다운로드 ── */
+    /* ── 5. 이미지 공유/다운로드 ── */
     const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
     const file=new File([blob],'sex-mbti-result.png',{type:'image/png'});
-
     const code=document.getElementById('rCode').textContent;
     const name=document.getElementById('rName').textContent;
     const text='나의 SEX MBTI는 '+code+' '+name+'!\n성심리학 이론 기반으로 분석된 나의 친밀한 성향 🔬';
@@ -651,9 +644,15 @@ async function share(){
     }
 
   }catch(e){
+    // 에러 시 원위치 복원
+    area.style.cssText='';
+    if(!document.getElementById('captureArea')){
+      if(origNext) origParent.insertBefore(area,origNext);
+      else origParent.appendChild(area);
+    }
     if(e.name!=='AbortError'){
       try{
-        const canvas=await html2canvas(document.getElementById('captureArea'),{scale:2,backgroundColor:'#FAFAFA',useCORS:true,logging:false});
+        const canvas=await html2canvas(area,{scale:2,backgroundColor:'#FAFAFA',useCORS:true,logging:false});
         downloadImage(canvas);
         alert('결과 이미지가 저장되었습니다!');
       }catch(e2){
@@ -665,6 +664,7 @@ async function share(){
     btn.disabled=false;
   }
 }
+
 
 
 function downloadImage(canvas){
