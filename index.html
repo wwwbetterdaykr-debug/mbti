@@ -336,8 +336,7 @@
   </div>
 </div>
 
-<div class="screen" id="screen-result">
-  <div id="captureArea" style="background:#FAFAFA;padding:0 0 20px">
+<div id="captureArea">
     <div class="result-header">
       <div class="r-badge">MY SEX MBTI</div>
       <div class="r-code" id="rCode"></div>
@@ -346,7 +345,7 @@
     </div>
     <div class="r-card"><h3>성향 분석 그래프</h3><div id="rBars"></div></div>
     <div style="text-align:center;padding:8px 0">
-      <span style="font-size:11px;color:#8B95A1;font-weight:500;letter-spacing:.5px">https://tryme.im</span>
+      <span style="font-size:11px;color:#8B95A1;font-weight:500;letter-spacing:.5px">sexmbti.tryme.im</span>
     </div>
   </div>
 
@@ -559,14 +558,65 @@ async function share(){
 
   try{
     const area=document.getElementById('captureArea');
+
+    // 캡처 전: html2canvas 호환 스타일 적용
+    area.style.cssText='background:#FAFAFA;padding:20px 20px 20px;width:460px;';
+
+    const codeEl=document.getElementById('rCode');
+    const origCodeStyle=codeEl.style.cssText;
+    codeEl.style.cssText='font-size:48px;font-weight:900;letter-spacing:-2px;color:#FF6B35;line-height:1.1;margin-bottom:6px;-webkit-text-fill-color:#FF6B35;';
+
+    const cards=area.querySelectorAll('.r-card');
+    const origCardStyles=[];
+    cards.forEach(c=>{
+      origCardStyles.push(c.style.cssText);
+      c.style.cssText='background:#FFFFFF;border:1px solid #E5E8EB;border-radius:16px;padding:20px;margin-bottom:12px;';
+    });
+
+    const tracks=area.querySelectorAll('.rb-track');
+    tracks.forEach(t=>{t.style.cssText='position:relative;width:100%;height:8px;background:#F2F4F6;border-radius:100px;overflow:hidden;';});
+
+    const fills=area.querySelectorAll('.rb-fill');
+    const origFillStyles=[];
+    fills.forEach(f=>{
+      origFillStyles.push(f.style.cssText);
+      const w=f.style.width||f.dataset.t+'%';
+      const isRight=f.classList.contains('from-right');
+      let bg='#FF6B35';
+      if(f.classList.contains('f-ei'))bg='#FF6B35';
+      else if(f.classList.contains('f-ei-r'))bg='#6366F1';
+      else if(f.classList.contains('f-sn'))bg='#F43F5E';
+      else if(f.classList.contains('f-sn-r'))bg='#8B5CF6';
+      else if(f.classList.contains('f-tf'))bg='#8B5CF6';
+      else if(f.classList.contains('f-tf-r'))bg='#EC4899';
+      else if(f.classList.contains('f-jp'))bg='#10B981';
+      else if(f.classList.contains('f-jp-r'))bg='#F59E0B';
+      f.style.cssText='position:absolute;top:0;height:100%;border-radius:100px;width:'+w+';background:'+bg+';'+(isRight?'right:0;':'left:0;');
+    });
+
+    const badge=area.querySelector('.r-badge');
+    const origBadgeStyle=badge?badge.style.cssText:'';
+    if(badge)badge.style.cssText='display:inline-block;font-size:11px;font-weight:600;color:#FF6B35;background:#FFF4EF;padding:4px 11px;border-radius:100px;margin-bottom:12px;letter-spacing:.5px;';
+
+    // 캡처
     const canvas=await html2canvas(area,{
       scale:2,
       backgroundColor:'#FAFAFA',
       useCORS:true,
       logging:false,
+      width:460,
       windowWidth:460
     });
 
+    // 캡처 후: 스타일 복원
+    area.style.cssText='';
+    codeEl.style.cssText=origCodeStyle;
+    cards.forEach((c,i)=>{c.style.cssText=origCardStyles[i];});
+    tracks.forEach(t=>{t.style.cssText='';});
+    fills.forEach((f,i)=>{f.style.cssText=origFillStyles[i];});
+    if(badge)badge.style.cssText=origBadgeStyle;
+
+    // 공유/다운로드
     const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
     const file=new File([blob],'sex-mbti-result.png',{type:'image/png'});
 
@@ -599,6 +649,7 @@ async function share(){
     btn.disabled=false;
   }
 }
+
 
 function downloadImage(canvas){
   const link=document.createElement('a');
