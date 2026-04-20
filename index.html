@@ -567,13 +567,6 @@ async function share(){
     const W=460;
     const PAD=24;
 
-    /* ── 로고를 미리 Base64로 변환 ── */
-    let logoBase64='';
-    try{
-      const resp=await fetch('https://bdsm.tryme.im/logo.png');
-      const blob=await resp.blob();
-      logoBase64=await new Promise(r=>{const rd=new FileReader();rd.onloadend=()=>r(rd.result);rd.readAsDataURL(blob);});
-    }catch(e){logoBase64='';}
 
     const canvas=await html2canvas(area,{
       scale:2,
@@ -650,19 +643,7 @@ async function share(){
           el.style.cssText='font-size:11px;color:#FF6B35;margin-top:2px;font-weight:500;text-align:'+(isLeft?'left':'right')+';';
         });
 
-        /* ── 워터마크: Base64 로고로 교체 ── */
-        const wm=c.querySelector('#captureWatermark');
-        if(wm){
-          wm.style.cssText='text-align:center;padding:20px 0 12px;width:100%;box-sizing:border-box;';
-          const wmImg=wm.querySelector('img');
-          if(wmImg&&logoBase64){
-            wmImg.src=logoBase64;
-            wmImg.style.cssText='height:24px;opacity:0.7;display:inline-block;';
-          }else if(wmImg&&!logoBase64){
-            wmImg.remove();
-            wm.innerHTML='<span style="font-size:11px;color:#8B95A1;font-weight:500;letter-spacing:.3px;">tryme.im</span>';
-          }
-        }
+
       }
     });
 
