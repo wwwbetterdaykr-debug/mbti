@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>SEX MBTI — 나의 친밀한 성향 테스트</title>
+
+<!-- ✅ GA4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-203XHNPR7Q"></script>
+<script>
+  window.dataLayer=window.dataLayer||[];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js',new Date());
+  gtag('config','G-203XHNPR7Q');
+</script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <style>
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
@@ -222,8 +232,9 @@
   </div>
   <button class="btn-primary" onclick="startTest()">테스트 시작하기</button>
   <button class="btn-ghost" onclick="openModal()">SEX MBTI 알아보기</button>
+  <!-- ✅ GA4: 트라이미 접속 이벤트 -->
   <div style="margin-top:20px;text-align:center">
-    <a href="https://tryme.im" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">
+    <a href="https://tryme.im" target="_blank" rel="noopener" onclick="gtag('event','sex mbti 트라이미 접속')" style="text-decoration:none;display:inline-block">
       <div style="position:relative;display:inline-block;background:var(--bar-bg);border:none;border-radius:10px;padding:8px 18px;font-size:13px;color:var(--text-tertiary);font-weight:500;margin-bottom:10px;letter-spacing:-.2px;animation:bubble 2s ease-in-out infinite">
         📝 섹슈얼 웰니스 매거진 구독하기
         <div style="position:absolute;bottom:-6px;left:50%;width:10px;height:10px;background:var(--bar-bg);border:none;transform:translateX(-50%) rotate(45deg)"></div>
@@ -327,7 +338,6 @@
   </div>
 </div>
 
-<!-- ✅ 수정: captureArea 래퍼 추가 -->
 <div class="screen" id="screen-result">
 
   <div id="captureArea">
@@ -355,8 +365,9 @@
     <button class="btn-secondary" onclick="location.reload()">테스트 다시 하기</button>
     <button class="btn-outline" id="shareBtn" onclick="share()">결과 공유하기</button>
   </div>
+  <!-- ✅ GA4: 트라이미 접속 이벤트 (결과 하단) -->
   <div style="margin-top:20px;text-align:center">
-    <a href="https://tryme.im" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">
+    <a href="https://tryme.im" target="_blank" rel="noopener" onclick="gtag('event','sex mbti 트라이미 접속')" style="text-decoration:none;display:inline-block">
       <div style="position:relative;display:inline-block;background:var(--bar-bg);border:none;border-radius:10px;padding:8px 18px;font-size:13px;color:var(--text-tertiary);font-weight:500;margin-bottom:10px;letter-spacing:-.2px;animation:bubble 2s ease-in-out infinite">
         📝 섹슈얼 웰니스 매거진 구독하기
         <div style="position:absolute;bottom:-6px;left:50%;width:10px;height:10px;background:var(--bar-bg);border:none;transform:translateX(-50%) rotate(45deg)"></div>
@@ -432,7 +443,12 @@ function show(id){document.getElementById(id).classList.add('active')}
 function openModal(){document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden'}
 function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
 function closeModalOutside(e){if(e.target===document.getElementById('modal'))closeModal()}
-function startTest(){hide('screen-intro');show('screen-question');render()}
+
+/* ✅ GA4: 테스트 시작 이벤트 */
+function startTest(){
+  gtag('event','sex mbti 테스트 시작');
+  hide('screen-intro');show('screen-question');render();
+}
 
 function render(){
   const q=QS[cur];
@@ -506,7 +522,9 @@ function calc(){
   showR(type,pct,strength);
 }
 
+/* ✅ GA4: 테스트 완료 이벤트 */
 function showR(type,p,strength){
+  gtag('event','sex mbti 테스트 완료',{mbti_type:type});
   hide('screen-loading');show('screen-result');
   const d=TD[type]||TD.ENFP;
   document.getElementById('rCode').textContent=type;
@@ -537,208 +555,167 @@ function showR(type,p,strength){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ✅ 수정: share() 함수 — 이미지 캡처 + 네이티브 공유 */
-/* ✅ 최종 수정: share() 함수 — onclone 방식으로 완벽 중앙 정렬 */
+/* ✅ 최종 수정: share() — onclone 내 body 직접 이동 방식 */
 async function share(){
-  const btn = document.getElementById('shareBtn');
-  const origText = btn.textContent;
-  btn.textContent = '이미지 생성 중...';
-  btn.disabled = true;
+  /* ✅ GA4: 결과 공유하기 이벤트 */
+  gtag('event','sex mbti 결과 공유하기');
 
-  try {
-    const area = document.getElementById('captureArea');
-    const W = 460;
-    const PAD = 24;
+  const btn=document.getElementById('shareBtn');
+  const origText=btn.textContent;
+  btn.textContent='이미지 생성 중...';
+  btn.disabled=true;
 
-    /* ── html2canvas onclone에서 모든 스타일 보정 ── */
-    const canvas = await html2canvas(area, {
-      scale: 2,
-      backgroundColor: '#FAFAFA',
-      useCORS: true,
-      logging: false,
-      width: W,
-      windowWidth: W,
-      scrollX: 0,
-      scrollY: 0,
-      x: 0,
-      y: 0,
-      onclone: function(clonedDoc) {
-        const c = clonedDoc.getElementById('captureArea');
+  try{
+    const area=document.getElementById('captureArea');
+    const W=460;
+    const PAD=24;
 
-        /* ── 루트 캡처 영역: body 최상단에 고정, 정확히 460px ── */
-        c.style.cssText = [
-          'position:fixed',
-          'left:0',
-          'top:0',
-          'width:' + W + 'px',
-          'max-width:' + W + 'px',
-          'min-width:' + W + 'px',
+    const canvas=await html2canvas(area,{
+      scale:2,
+      backgroundColor:'#FAFAFA',
+      useCORS:true,
+      logging:false,
+      windowWidth:W,
+      onclone:function(clonedDoc){
+        const c=clonedDoc.getElementById('captureArea');
+
+        /* ── 핵심: 복제된 요소를 body 직접 자식으로 이동 ── */
+        clonedDoc.body.innerHTML='';
+        clonedDoc.body.appendChild(c);
+        clonedDoc.body.style.cssText='margin:0;padding:0;background:#FAFAFA;';
+
+        /* ── captureArea 자체 스타일 ── */
+        c.style.cssText=[
+          'position:relative',
+          'width:'+W+'px',
+          'max-width:'+W+'px',
           'margin:0',
-          'padding:28px ' + PAD + 'px 16px ' + PAD + 'px',
+          'padding:28px '+PAD+'px 16px '+PAD+'px',
           'background:#FAFAFA',
           'box-sizing:border-box',
-          'z-index:99999',
           'overflow:hidden'
         ].join(';');
 
-        /* 부모 container의 padding 영향 제거 */
-        let parent = c.parentElement;
-        while(parent && parent !== clonedDoc.body) {
-          parent.style.padding = '0';
-          parent.style.margin = '0';
-          parent.style.maxWidth = 'none';
-          parent.style.width = '100%';
-          parent = parent.parentElement;
-        }
-
-        /* ── result-header 중앙 정렬 ── */
-        const header = c.querySelector('.result-header');
-        if(header) {
-          header.style.cssText = 'text-align:center;padding-top:32px;margin-bottom:24px;width:100%;';
-        }
+        /* ── result-header ── */
+        const header=c.querySelector('.result-header');
+        if(header) header.style.cssText='text-align:center;padding-top:32px;margin-bottom:24px;width:100%;';
 
         /* ── r-badge ── */
-        const badge = c.querySelector('.r-badge');
-        if(badge) {
-          badge.style.cssText = 'display:inline-flex;font-size:11px;font-weight:600;color:#FF6B35;background:#FFF4EF;padding:4px 11px;border-radius:100px;margin-bottom:12px;letter-spacing:.5px;';
-        }
+        const badge=c.querySelector('.r-badge');
+        if(badge) badge.style.cssText='display:inline-flex;font-size:11px;font-weight:600;color:#FF6B35;background:#FFF4EF;padding:4px 11px;border-radius:100px;margin-bottom:12px;letter-spacing:.5px;';
 
-        /* ── r-code: 그라디언트 → 단색 (html2canvas 호환) ── */
-        const codeEl = c.querySelector('#rCode') || c.querySelector('.r-code');
-        if(codeEl) {
-          codeEl.style.cssText = 'font-size:48px;font-weight:900;letter-spacing:-2px;color:#FF6B35;-webkit-text-fill-color:#FF6B35;background:none;-webkit-background-clip:unset;background-clip:unset;line-height:1.1;margin-bottom:6px;text-align:center;';
-        }
+        /* ── r-code: 그라디언트→단색 ── */
+        const codeEl=c.querySelector('#rCode');
+        if(codeEl) codeEl.style.cssText='font-size:48px;font-weight:900;letter-spacing:-2px;color:#FF6B35;-webkit-text-fill-color:#FF6B35;background:none;-webkit-background-clip:unset;background-clip:unset;line-height:1.1;margin-bottom:6px;text-align:center;';
 
         /* ── r-name ── */
-        const nameEl = c.querySelector('#rName') || c.querySelector('.r-name');
-        if(nameEl) {
-          nameEl.style.cssText = 'font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:10px;color:#191F28;text-align:center;';
-        }
+        const nameEl=c.querySelector('#rName');
+        if(nameEl) nameEl.style.cssText='font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:10px;color:#191F28;text-align:center;';
 
         /* ── r-one ── */
-        const oneEl = c.querySelector('#rOne') || c.querySelector('.r-one');
-        if(oneEl) {
-          oneEl.style.cssText = 'font-size:14px;color:#4E5968;line-height:1.7;word-break:keep-all;text-align:center;';
-        }
+        const oneEl=c.querySelector('#rOne');
+        if(oneEl) oneEl.style.cssText='font-size:14px;color:#4E5968;line-height:1.7;word-break:keep-all;text-align:center;padding:0 8px;';
 
-        /* ── r-card: 전체 너비 사용 ── */
-        c.querySelectorAll('.r-card').forEach(card => {
-          card.style.cssText = 'background:#FFFFFF;border:1px solid #E5E8EB;border-radius:16px;padding:20px;margin-bottom:12px;width:100%;box-sizing:border-box;';
+        /* ── r-card ── */
+        c.querySelectorAll('.r-card').forEach(card=>{
+          card.style.cssText='background:#FFFFFF;border:1px solid #E5E8EB;border-radius:16px;padding:20px;margin-bottom:12px;width:100%;box-sizing:border-box;';
         });
 
         /* ── r-card h3 ── */
-        c.querySelectorAll('.r-card h3').forEach(h => {
-          h.style.cssText = 'font-size:14px;font-weight:700;margin-bottom:14px;color:#191F28;';
+        c.querySelectorAll('.r-card h3').forEach(h=>{
+          h.style.cssText='font-size:14px;font-weight:700;margin-bottom:14px;color:#191F28;';
         });
 
         /* ── rb-item ── */
-        c.querySelectorAll('.rb-item').forEach(item => {
-          item.style.width = '100%';
-          item.style.boxSizing = 'border-box';
+        c.querySelectorAll('.rb-item').forEach(item=>{
+          item.style.cssText='margin-bottom:16px;width:100%;box-sizing:border-box;';
         });
+        const lastItem=c.querySelector('.rb-item:last-child');
+        if(lastItem) lastItem.style.marginBottom='0';
 
         /* ── rb-labels ── */
-        c.querySelectorAll('.rb-labels').forEach(lb => {
-          lb.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:5px;font-size:12.5px;font-weight:700;width:100%;';
+        c.querySelectorAll('.rb-labels').forEach(lb=>{
+          lb.style.cssText='display:flex;justify-content:space-between;margin-bottom:5px;font-size:12.5px;font-weight:700;width:100%;';
+        });
+        c.querySelectorAll('.rb-l').forEach(el=>{
+          const isWin=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
+          el.style.cssText='color:'+(isWin?'#191F28':'#8B95A1')+';font-weight:'+(isWin?'700':'500')+';';
+        });
+        c.querySelectorAll('.rb-r').forEach(el=>{
+          const isWin=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('right-win');
+          el.style.cssText='color:'+(isWin?'#191F28':'#8B95A1')+';font-weight:'+(isWin?'700':'500')+';';
         });
 
-        c.querySelectorAll('.rb-l').forEach(el => {
-          const isWin = el.closest('.rb-item') && el.closest('.rb-item').classList.contains('left-win');
-          el.style.color = isWin ? '#191F28' : '#8B95A1';
-          el.style.fontWeight = isWin ? '700' : '500';
-        });
-        c.querySelectorAll('.rb-r').forEach(el => {
-          const isWin = el.closest('.rb-item') && el.closest('.rb-item').classList.contains('right-win');
-          el.style.color = isWin ? '#191F28' : '#8B95A1';
-          el.style.fontWeight = isWin ? '700' : '500';
+        /* ── rb-track ── */
+        c.querySelectorAll('.rb-track').forEach(t=>{
+          t.style.cssText='position:relative;width:100%;height:8px;background:#F2F4F6;border-radius:100px;overflow:hidden;box-sizing:border-box;';
         });
 
-        /* ── rb-track: 전체 너비 ── */
-        c.querySelectorAll('.rb-track').forEach(t => {
-          t.style.cssText = 'position:relative;width:100%;height:8px;background:#F2F4F6;border-radius:100px;overflow:hidden;box-sizing:border-box;';
-        });
-
-        /* ── rb-fill: 색상 인라인 ── */
-        const fillColors = {
-          'f-ei':'#FF6B35','f-ei-r':'#6366F1',
-          'f-sn':'#F43F5E','f-sn-r':'#8B5CF6',
-          'f-tf':'#8B5CF6','f-tf-r':'#EC4899',
-          'f-jp':'#10B981','f-jp-r':'#F59E0B'
-        };
-        c.querySelectorAll('.rb-fill').forEach(f => {
-          const w = f.style.width || f.dataset.t + '%';
-          const isRight = f.classList.contains('from-right');
-          let bg = '#FF6B35';
-          for(const cls in fillColors) {
-            if(f.classList.contains(cls)) { bg = fillColors[cls]; break; }
-          }
-          f.style.cssText = 'position:absolute;top:0;height:100%;border-radius:100px;width:' + w + ';background:' + bg + ';' + (isRight ? 'right:0;' : 'left:0;');
+        /* ── rb-fill ── */
+        const fillColors={'f-ei':'#FF6B35','f-ei-r':'#6366F1','f-sn':'#F43F5E','f-sn-r':'#8B5CF6','f-tf':'#8B5CF6','f-tf-r':'#EC4899','f-jp':'#10B981','f-jp-r':'#F59E0B'};
+        c.querySelectorAll('.rb-fill').forEach(f=>{
+          const w=f.style.width||f.dataset.t+'%';
+          const isRight=f.classList.contains('from-right');
+          let bg='#FF6B35';
+          for(const cls in fillColors){if(f.classList.contains(cls)){bg=fillColors[cls];break;}}
+          f.style.cssText='position:absolute;top:0;height:100%;border-radius:100px;width:'+w+';background:'+bg+';'+(isRight?'right:0;':'left:0;');
         });
 
         /* ── rb-pct ── */
-        c.querySelectorAll('.rb-pct').forEach(el => {
-          el.style.color = '#4E5968';
+        c.querySelectorAll('.rb-pct').forEach(el=>{
+          const isLeft=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
+          el.style.cssText='font-size:11px;margin-top:3px;color:#4E5968;text-align:'+(isLeft?'left':'right')+';';
         });
 
         /* ── rb-note ── */
-        c.querySelectorAll('.rb-note').forEach(el => {
-          el.style.color = '#FF6B35';
+        c.querySelectorAll('.rb-note').forEach(el=>{
+          const isLeft=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
+          el.style.cssText='font-size:11px;color:#FF6B35;margin-top:2px;font-weight:500;text-align:'+(isLeft?'left':'right')+';';
         });
 
-        /* ── 워터마크 영역 중앙 정렬 ── */
-        const watermarks = c.querySelectorAll('div[style*="text-align:center"]');
-        watermarks.forEach(wm => {
-          wm.style.textAlign = 'center';
-          wm.style.width = '100%';
+        /* ── 워터마크 ── */
+        c.querySelectorAll('span').forEach(sp=>{
+          if(sp.textContent.includes('sexmbti')){
+            sp.parentElement.style.cssText='text-align:center;padding:4px 0 8px;width:100%;';
+            sp.style.cssText='font-size:11px;color:#8B95A1;font-weight:500;letter-spacing:.3px;';
+          }
         });
       }
     });
 
     /* ── 이미지 생성 및 공유/다운로드 ── */
-    const blob = await new Promise(r => canvas.toBlob(r, 'image/png'));
-    const file = new File([blob], 'sex-mbti-result.png', {type:'image/png'});
+    const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
+    const file=new File([blob],'sex-mbti-result.png',{type:'image/png'});
 
-    const code = document.getElementById('rCode').textContent;
-    const name = document.getElementById('rName').textContent;
-    const text = '나의 SEX MBTI는 ' + code + ' ' + name + '!\n성심리학 이론 기반으로 분석된 나의 친밀한 성향 🔬';
+    const code=document.getElementById('rCode').textContent;
+    const name=document.getElementById('rName').textContent;
+    const text='나의 SEX MBTI는 '+code+' '+name+'!\n성심리학 이론 기반으로 분석된 나의 친밀한 성향 🔬';
 
-    if(navigator.canShare && navigator.canShare({files:[file]})){
-      await navigator.share({title:'SEX MBTI', text:text, files:[file]});
-    } else if(navigator.share){
+    if(navigator.canShare&&navigator.canShare({files:[file]})){
+      await navigator.share({title:'SEX MBTI',text:text,files:[file]});
+    }else if(navigator.share){
       downloadImage(canvas);
-      await navigator.share({title:'SEX MBTI', text:text, url:location.href});
-    } else {
+      await navigator.share({title:'SEX MBTI',text:text,url:location.href});
+    }else{
       downloadImage(canvas);
       alert('결과 이미지가 저장되었습니다!');
     }
 
-  } catch(e) {
-    if(e.name !== 'AbortError'){
-      try {
-        const fallbackCanvas = await html2canvas(document.getElementById('captureArea'), {
-          scale: 2, backgroundColor:'#FAFAFA', useCORS:true, logging:false
-        });
+  }catch(e){
+    if(e.name!=='AbortError'){
+      try{
+        const fallbackCanvas=await html2canvas(document.getElementById('captureArea'),{scale:2,backgroundColor:'#FAFAFA',useCORS:true,logging:false});
         downloadImage(fallbackCanvas);
         alert('결과 이미지가 저장되었습니다!');
-      } catch(e2) {
+      }catch(e2){
         alert('이미지 생성에 실패했습니다. 스크린샷을 이용해주세요.');
       }
     }
-  } finally {
-    btn.textContent = origText;
-    btn.disabled = false;
+  }finally{
+    btn.textContent=origText;
+    btn.disabled=false;
   }
 }
-
-function downloadImage(canvas){
-  const link = document.createElement('a');
-  link.download = 'sex-mbti-result.png';
-  link.href = canvas.toDataURL('image/png');
-  link.click();
-}
-
-
-
 
 function downloadImage(canvas){
   const link=document.createElement('a');
@@ -752,7 +729,7 @@ document.addEventListener('keydown',e=>{
   if(e.key>='1'&&e.key<='7')sel(+e.key);
   if(e.key==='ArrowLeft')prev();
   if(e.key==='ArrowRight')next();
-  if(e.key==='Enter'&&cur===35)submit();
+  if(e.key==='Enter'&&cur===35)submit
 });
 </script>
 </body>
