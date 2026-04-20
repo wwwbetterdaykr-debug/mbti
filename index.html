@@ -674,16 +674,21 @@ async function share(){
           el.style.cssText='font-size:11px;color:#FF6B35;margin-top:2px;font-weight:500;text-align:'+(isLeft?'left':'right')+';';
         });
 
-        /* ── 워터마크 (로고 이미지) ── */
-const wm = c.querySelector('#captureWatermark');
-if (wm) {
-  wm.style.cssText = 'text-align:center;padding:20px 0 12px;width:100%;box-sizing:border-box;';
-  const wmImg = wm.querySelector('img');
-  if (wmImg) {
-    wmImg.style.cssText = 'height:24px;opacity:0.7;display:inline-block;';
-    wmImg.setAttribute('crossorigin', 'anonymous');
-  }
-}
+               /* ── 워터마크 (로고 이미지) ── */
+        const wm = c.querySelector('#captureWatermark');
+        if (wm) {
+          wm.style.cssText = 'text-align:center;padding:20px 0 12px;width:100%;box-sizing:border-box;';
+          const wmImg = wm.querySelector('img');
+          if (wmImg) {
+            wmImg.style.cssText = 'height:24px;opacity:0.7;display:inline-block;';
+            wmImg.setAttribute('crossorigin', 'anonymous');
+          }
+        }
+      }   // ← onclone 함수 닫기
+    });    // ← html2canvas 옵션 닫기
+
+    /* ── 이미지 생성 및 공유/다운로드 ── */
+
 
 
     /* ── 이미지 생성 및 공유/다운로드 ── */
