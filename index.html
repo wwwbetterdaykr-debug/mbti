@@ -19,12 +19,20 @@
   .screen{display:none;animation:fadeIn .35s ease}.screen.active{display:block}
   @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   @keyframes slideIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes bubble{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
 
-  .intro-hero{padding:72px 0 24px;text-align:center}
-  .intro-badge{display:inline-flex;align-items:center;gap:6px;background:var(--accent-light);color:var(--accent);font-size:13px;font-weight:600;padding:6px 14px;border-radius:100px;margin-bottom:20px}
-  .intro-hero h1{font-size:26px;font-weight:800;line-height:1.4;letter-spacing:-.7px;margin-bottom:14px}
+  .intro-hero{padding:60px 0 0;text-align:center}
+  .intro-overline{font-size:11px;font-weight:600;color:var(--text-tertiary);letter-spacing:2.5px;text-transform:uppercase;margin-bottom:12px}
+  .intro-hero h1{font-size:44px;font-weight:900;line-height:1.1;letter-spacing:-2px;margin-bottom:6px}
   .intro-hero h1 .gt{background:linear-gradient(135deg,var(--gs),var(--ge));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-  .intro-hero>p{font-size:15px;color:var(--text-secondary);line-height:1.7;word-break:keep-all}
+  .intro-tagline{font-size:13.5px;color:var(--text-tertiary);font-weight:500;letter-spacing:.3px;margin-bottom:28px;font-style:italic}
+  .intro-divider{width:32px;height:2px;background:var(--border);margin:0 auto 24px;border-radius:2px}
+  .intro-hero>p{font-size:16px;color:var(--text-primary);line-height:1.7;word-break:keep-all;font-weight:700;letter-spacing:-.3px}
+  .intro-sub{font-size:13px;color:var(--text-secondary);font-weight:400;margin-top:8px;line-height:1.6}
+
+  .origin-bar{display:flex;align-items:center;justify-content:center;gap:16px;margin:24px 0 20px;padding:14px 0;border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+  .origin-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text-tertiary);font-weight:600;letter-spacing:.2px}
+  .origin-dot{width:4px;height:4px;border-radius:50%;background:var(--text-tertiary);opacity:.4}
 
   .d1{background:#FF6B35}.d2{background:#F43F5E}.d3{background:#8B5CF6}.d4{background:#10B981}
   .evidence-banner{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 16px;margin:20px 0 16px;text-align:center}
@@ -38,8 +46,6 @@
   .info-item .ii{font-size:20px;margin-bottom:4px}
   .info-item h4{font-size:12px;font-weight:700;margin-bottom:1px}
   .info-item p{font-size:10.5px;color:var(--text-tertiary);line-height:1.4}
-  .notice{background:var(--bar-bg);border-radius:var(--radius-sm);padding:14px 16px;margin:0 0 20px;display:flex;gap:10px;align-items:flex-start}
-  .notice p{font-size:12.5px;color:var(--text-secondary);line-height:1.55}
   .btn-primary{width:100%;padding:16px 0;background:linear-gradient(135deg,var(--gs),var(--ge));color:#fff;border:none;border-radius:var(--radius-sm);font-size:16px;font-weight:700;cursor:pointer;transition:all .15s}
   .btn-primary:active{transform:scale(.985);opacity:.9}
   .btn-ghost{width:100%;padding:14px 0;background:none;border:none;color:var(--text-tertiary);font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;text-decoration:underline;text-underline-offset:3px}
@@ -166,7 +172,9 @@
   .r-disclaimer{background:var(--bar-bg);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px;font-size:11.5px;color:var(--text-tertiary);line-height:1.6;word-break:keep-all}
 
   @media(max-width:380px){
-    .intro-hero h1{font-size:23px}
+    .intro-hero h1{font-size:38px}
+    .origin-bar{gap:10px;flex-wrap:wrap}
+    .origin-item{font-size:10.5px}
     .q-number{font-size:40px;margin-bottom:8px}
     .q-text{font-size:18px}
     .q-text-box{height:110px;margin-bottom:10px}
@@ -183,9 +191,19 @@
 
 <div class="screen active" id="screen-intro">
   <div class="intro-hero">
-    <div class="intro-badge">🔬 Peer-Reviewed 이론 기반</div>
-    <h1>당신의 <span class="gt">친밀한 성향</span>을<br>과학적으로 분석합니다</h1>
-    <p>성심리학 검증 척도 기반 · 36문항 · 가중 채점 알고리즘</p>
+    <div class="intro-overline">Sexual Psychology Assessment</div>
+    <h1><span class="gt">SEX MBTI</span></h1>
+    <div class="intro-tagline">Developed from U.S. peer-reviewed clinical scales</div>
+    <div class="intro-divider"></div>
+    <p>당신의 친밀한 성향을 과학적으로 분석합니다</p>
+    <p class="intro-sub">미국 성심리학 4대 검증 척도 기반 섹스 MBTI</p>
+  </div>
+  <div class="origin-bar">
+    <span class="origin-item">📄 4 Peer-Reviewed Scales</span>
+    <span class="origin-dot"></span>
+    <span class="origin-item">🇺🇸 U.S. Validated</span>
+    <span class="origin-dot"></span>
+    <span class="origin-item">🔬 36 Items</span>
   </div>
   <div class="evidence-banner">
     <div class="eb-top">
@@ -194,19 +212,24 @@
       <span class="eb-chip"><span class="eb-dot d3"></span>ECR-R</span>
       <span class="eb-chip"><span class="eb-dot d4"></span>SSSS</span>
     </div>
-    <p class="eb-note">Peer-reviewed 학술 논문 4편의 검증된 척도 구조 적용</p>
+    <p class="eb-note">U.S. peer-reviewed journals에 게재된 4개 검증 척도 적용</p>
   </div>
   <div class="info-row">
     <div class="info-item"><div class="ii">⏱</div><h4>약 5분</h4><p>36문항</p></div>
     <div class="info-item"><div class="ii">🔒</div><h4>완전 익명</h4><p>저장 없음</p></div>
     <div class="info-item"><div class="ii">🧬</div><h4>16유형</h4><p>4축 연속점수</p></div>
   </div>
-  <div class="notice">
-    <span style="font-size:14px;flex-shrink:0">💡</span>
-    <p>정답은 없어요. 직감적으로 솔직하게 답할수록 결과가 정확합니다.</p>
-  </div>
   <button class="btn-primary" onclick="startTest()">테스트 시작하기</button>
-  <button class="btn-ghost" onclick="openModal()">검사 구조 알아보기</button>
+  <button class="btn-ghost" onclick="openModal()">SEX MBTI 알아보기</button>
+  <div style="margin-top:20px;text-align:center">
+    <a href="https://tryme.im" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">
+      <div style="position:relative;display:inline-block;background:var(--bar-bg);border:none;border-radius:10px;padding:8px 18px;font-size:13px;color:var(--text-tertiary);font-weight:500;margin-bottom:10px;letter-spacing:-.2px;animation:bubble 2s ease-in-out infinite">
+        📝 섹슈얼 웰니스 매거진 구독하기
+        <div style="position:absolute;bottom:-6px;left:50%;width:10px;height:10px;background:var(--bar-bg);border:none;transform:translateX(-50%) rotate(45deg)"></div>
+      </div>
+      <img src="https://bdsm.tryme.im/logo.png" alt="트라이미" style="height:24px;opacity:.25;display:block;margin:0 auto">
+    </a>
+  </div>
 </div>
 
 <div class="modal-overlay" id="modal" onclick="closeModalOutside(event)">
@@ -311,7 +334,7 @@
     <div class="r-one" id="rOne"></div>
   </div>
   <div class="r-card"><h3>성향 분석 그래프</h3><div id="rBars"></div></div>
-  <button class="btn-guide" onclick="openModal()">📖 검사 구조 알아보기</button>
+  <button class="btn-guide" onclick="openModal()">📖 SEX MBTI 알아보기</button>
   <div class="r-card"><h3>당신의 친밀한 성향</h3><p id="rAn"></p></div>
   <div class="r-card"><h3>이 유형이 자주 하는 말</h3><div id="rQ" style="margin-top:12px"></div></div>
   <div class="r-card"><h3>궁합</h3><div id="rC" style="margin-top:8px"></div></div>
@@ -322,6 +345,15 @@
     <p>친구, 연인과 함께 해보세요</p>
     <button class="btn-secondary" onclick="location.reload()">테스트 다시 하기</button>
     <button class="btn-outline" onclick="share()">결과 공유하기</button>
+  </div>
+  <div style="margin-top:20px;text-align:center">
+    <a href="https://tryme.im" target="_blank" rel="noopener" style="text-decoration:none;display:inline-block">
+      <div style="position:relative;display:inline-block;background:var(--bar-bg);border:none;border-radius:10px;padding:8px 18px;font-size:13px;color:var(--text-tertiary);font-weight:500;margin-bottom:10px;letter-spacing:-.2px;animation:bubble 2s ease-in-out infinite">
+        📝 섹슈얼 웰니스 매거진 구독하기
+        <div style="position:absolute;bottom:-6px;left:50%;width:10px;height:10px;background:var(--bar-bg);border:none;transform:translateX(-50%) rotate(45deg)"></div>
+      </div>
+      <img src="https://bdsm.tryme.im/logo.png" alt="트라이미" style="height:24px;opacity:.25;display:block;margin:0 auto">
+    </a>
   </div>
 </div>
 
