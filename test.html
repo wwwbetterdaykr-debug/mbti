@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>SEX MBTI — 나의 친밀한 성향 테스트</title>
+<title>SEX MBTI — 나의 은밀한 성향 테스트</title>
 
 <!-- ✅ GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-203XHNPR7Q"></script>
@@ -210,7 +210,7 @@
     <h1><span class="gt">SEX MBTI</span></h1>
     <div class="intro-tagline">Developed from U.S. peer-reviewed clinical scales</div>
     <div class="intro-divider"></div>
-    <p>당신의 친밀한 성향을 과학적으로 분석합니다</p>
+    <p>당신의 은밀한 성향을 과학적으로 분석합니다</p>
     <p class="intro-sub">미국 성심리학 4대 검증 척도 기반 섹스 MBTI</p>
   </div>
   <div class="origin-bar">
@@ -357,7 +357,7 @@
   <button class="btn-save-img" id="btnSaveImg" onclick="saveImage()">📷 이미지 저장하기</button>
 
   <button class="btn-guide" onclick="openModal()">📖 SEX MBTI 알아보기</button>
-  <div class="r-card"><h3>당신의 친밀한 성향</h3><p id="rAn"></p></div>
+  <div class="r-card"><h3>당신의 은밀한 성향</h3><p id="rAn"></p></div>
   <div class="r-card"><h3>이 유형이 자주 하는 말</h3><div id="rQ" style="margin-top:12px"></div></div>
   <div class="r-card"><h3>궁합</h3><div id="rC" style="margin-top:8px"></div></div>
   <div class="r-disclaimer">
@@ -705,7 +705,7 @@ async function shareResult(){
     const code=document.getElementById('rCode').textContent;
     const name=document.getElementById('rName').textContent;
     const shareURL=buildShareURL();
-    const text='나의 SEX MBTI는 '+code+' '+name+'!\n성심리학 이론 기반으로 분석된 나의 친밀한 성향 🔬\n\n내 결과 보기 👇\n'+shareURL;
+    const text='나의 SEX MBTI는 '+code+' '+name+'!\n성심리학 이론 기반으로 분석된 나의 은밀한 성향 🔬\n\n내 결과 보기 👇\n'+shareURL;
 
     if(navigator.canShare&&navigator.canShare({files:[file]})){
       await navigator.share({title:'SEX MBTI 결과',text:text,files:[file]});
