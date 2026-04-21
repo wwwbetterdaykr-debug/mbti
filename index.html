@@ -3,7 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>SEX MBTI — 나의 친밀한 성향 테스트</title>
+<title>SEX MBTI — 나의 은밀한 성향 테스트</title>
+<!-- ✅ Open Graph / 링크 미리보기 -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="SEX MBTI — 나의 은밀한 성향 테스트">
+<meta property="og:description" content="성심리학 4대 검증 척도 기반, 36문항으로 알아보는 나의 은밀한 성향 16유형">
+<meta property="og:image" content="https://mbti.tryme.im/tryme.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://mbti.tryme.im">
+
+<!-- ✅ Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="SEX MBTI — 나의 은밀한 성향 테스트">
+<meta name="twitter:description" content="성심리학 4대 검증 척도 기반, 36문항으로 알아보는 나의 은밀한 성향 16유형">
+<meta name="twitter:image" content="https://mbti.tryme.im/tryme.png">
 
 <!-- ✅ GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-203XHNPR7Q"></script>
@@ -148,6 +162,8 @@
   .r-card p{font-size:13.5px;color:var(--text-secondary);line-height:1.75;word-break:keep-all}
   .btn-guide{width:100%;padding:14px 0;background:var(--accent-light);color:var(--accent);border:1px solid rgba(255,107,53,.2);border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:12px}
   .btn-guide:active{opacity:.8;transform:scale(.985)}
+  .btn-save-img{width:100%;padding:14px 0;background:var(--surface);color:var(--text-primary);border:1px solid var(--border);border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:10px}
+  .btn-save-img:active{opacity:.8;transform:scale(.985)}
   .rb-item{margin-bottom:16px}.rb-item:last-child{margin-bottom:0}
   .rb-labels{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12.5px;font-weight:700}
   .rb-l,.rb-r{transition:all .3s}
@@ -182,6 +198,8 @@
   .share-area p{font-size:12px;color:var(--text-tertiary);margin-bottom:12px}
   .r-disclaimer{background:var(--bar-bg);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px;font-size:11.5px;color:var(--text-tertiary);line-height:1.6;word-break:keep-all}
 
+  .shared-cta{text-align:center;padding:20px 0 10px}
+
   @media(max-width:380px){
     .intro-hero h1{font-size:38px}
     .origin-bar{gap:10px;flex-wrap:wrap}
@@ -206,7 +224,7 @@
     <h1><span class="gt">SEX MBTI</span></h1>
     <div class="intro-tagline">Developed from U.S. peer-reviewed clinical scales</div>
     <div class="intro-divider"></div>
-    <p>당신의 친밀한 성향을 과학적으로 분석합니다</p>
+    <p>당신의 은밀한 성향을 과학적으로 분석합니다</p>
     <p class="intro-sub">미국 성심리학 4대 검증 척도 기반 섹스 MBTI</p>
   </div>
   <div class="origin-bar">
@@ -232,7 +250,6 @@
   </div>
   <button class="btn-primary" onclick="startTest()">테스트 시작하기</button>
   <button class="btn-ghost" onclick="openModal()">SEX MBTI 알아보기</button>
-  <!-- ✅ GA4: 트라이미 접속 이벤트 -->
   <div style="margin-top:20px;text-align:center">
     <a href="https://tryme.im" target="_blank" rel="noopener" onclick="gtag('event','sex mbti 트라이미 접속')" style="text-decoration:none;display:inline-block">
       <div style="position:relative;display:inline-block;background:var(--bar-bg);border:none;border-radius:10px;padding:8px 18px;font-size:13px;color:var(--text-tertiary);font-weight:500;margin-bottom:10px;letter-spacing:-.2px;animation:bubble 2s ease-in-out infinite">
@@ -348,22 +365,31 @@
       <div class="r-one" id="rOne"></div>
     </div>
     <div class="r-card"><h3>성향 분석 그래프</h3><div id="rBars"></div></div>
-
   </div>
 
+  <!-- ✅ 이미지 저장하기 버튼 (공유 링크 접속 시 숨김) -->
+  <button class="btn-save-img" id="btnSaveImg" onclick="saveImage()">📷 이미지 저장하기</button>
+
   <button class="btn-guide" onclick="openModal()">📖 SEX MBTI 알아보기</button>
-  <div class="r-card"><h3>당신의 친밀한 성향</h3><p id="rAn"></p></div>
+  <div class="r-card"><h3>당신의 은밀한 성향</h3><p id="rAn"></p></div>
   <div class="r-card"><h3>이 유형이 자주 하는 말</h3><div id="rQ" style="margin-top:12px"></div></div>
   <div class="r-card"><h3>궁합</h3><div id="rC" style="margin-top:8px"></div></div>
   <div class="r-disclaimer">
     ※ 본 검사는 SOI-R, SES/SIS, ECR-R, SSSS의 구성 개념을 기반으로 설계된 자기탐색 콘텐츠입니다. 임상적 진단 도구가 아니며, 학술적으로 검증된 공식 심리 검사가 아닙니다. 결과는 자기 이해와 파트너와의 대화를 위한 참고 자료로 활용하시기 바랍니다.
   </div>
-  <div class="share-area">
+
+  <!-- ✅ 직접 테스트한 사람에게만 보이는 영역 -->
+  <div class="share-area" id="shareArea">
     <p>친구, 연인과 함께 해보세요</p>
     <button class="btn-secondary" onclick="location.reload()">테스트 다시 하기</button>
-    <button class="btn-outline" id="shareBtn" onclick="share()">결과 공유하기</button>
+    <button class="btn-outline" id="shareBtn" onclick="shareResult()">결과 공유하기</button>
   </div>
-  <!-- ✅ GA4: 트라이미 접속 이벤트 (결과 하단) -->
+
+  <!-- ✅ 공유 링크로 접속한 사람에게만 보이는 영역 -->
+  <div class="shared-cta" id="sharedCta" style="display:none">
+    <button class="btn-primary" onclick="goToTest()">SEX MBTI 테스트 시작하기</button>
+  </div>
+
   <div style="margin-top:20px;text-align:center">
     <a href="https://tryme.im" target="_blank" rel="noopener" onclick="gtag('event','sex mbti 트라이미 접속')" style="text-decoration:none;display:inline-block">
       <div style="position:relative;display:inline-block;background:var(--bar-bg);border:none;border-radius:10px;padding:8px 18px;font-size:13px;color:var(--text-tertiary);font-weight:500;margin-bottom:10px;letter-spacing:-.2px;animation:bubble 2s ease-in-out infinite">
@@ -435,17 +461,22 @@ const TD={
   INFP:{n:"몽환 로맨티스트",e:"🫧",o:"내적 상상이 충분히 무르익어야 하며, 인지적 판타지에서 흥분하고, 사랑만이 만족의 기준이며, 자연스러운 흐름에 맡긴다.",an:"내부 조건 의존형으로 상상과 감정이 충분히 쌓여야 하며(I), 몽환적 분위기·서사에서 흥분합니다(N). 유일한 만족 기준은 정서적 연결이며(F), 즉흥적이고 자연스러운 흐름을 선호합니다(P). 머릿속 영화가 현실이 되는 순간을 꿈꾸는, 가장 이상주의적인 타입입니다.",q:['"머릿속이 영화야"','"사랑한다고 말해줘"','"이 순간 영원했으면"'],b:"ESTJ",w:"INFJ"}
 };
 
+let currentResult = { type:'', pct:{}, strength:{} };
 let cur=0,ans=new Array(36).fill(null),tmr=null;
+
 function hide(id){document.getElementById(id).classList.remove('active')}
 function show(id){document.getElementById(id).classList.add('active')}
 function openModal(){document.getElementById('modal').classList.add('open');document.body.style.overflow='hidden'}
 function closeModal(){document.getElementById('modal').classList.remove('open');document.body.style.overflow=''}
 function closeModalOutside(e){if(e.target===document.getElementById('modal'))closeModal()}
 
-/* ✅ GA4: 테스트 시작 이벤트 */
 function startTest(){
   gtag('event','sex mbti 테스트 시작');
   hide('screen-intro');show('screen-question');render();
+}
+
+function goToTest(){
+  window.location.href = window.location.pathname;
 }
 
 function render(){
@@ -517,13 +548,15 @@ function calc(){
     else if(dist<=30)strength[a]='분명한';
     else strength[a]='뚜렷한';
   });
-  showR(type,pct,strength);
+  showR(type,pct,strength,false);
 }
 
-/* ✅ GA4: 테스트 완료 이벤트 */
-function showR(type,p,strength){
-  gtag('event','sex mbti 테스트 완료',{mbti_type:type});
+function showR(type,p,strength,isShared){
+  if(!isShared) gtag('event','sex mbti 테스트 완료',{mbti_type:type});
   hide('screen-loading');show('screen-result');
+
+  currentResult = { type:type, pct:p, strength:strength };
+
   const d=TD[type]||TD.ENFP;
   document.getElementById('rCode').textContent=type;
   document.getElementById('rName').textContent=d.e+' '+d.n;
@@ -550,132 +583,180 @@ function showR(type,p,strength){
   document.getElementById('rQ').innerHTML=d.q.map(q=>`<div class="rq">${q}</div>`).join('');
   const bd=TD[d.b],wd=TD[d.w];
   document.getElementById('rC').innerHTML=`<div class="ci-item"><div class="ci-emoji">💘</div><div class="ci-info"><h4>불꽃 궁합 — ${d.b} ${bd?bd.n:''}</h4><p>서로 다른 매력이 강렬한 시너지를 만드는 조합</p></div></div><div class="ci-item"><div class="ci-emoji">💭</div><div class="ci-info"><h4>노력 궁합 — ${d.w} ${wd?wd.n:''}</h4><p>리듬이 달라서 맞춰가는 과정이 필요한 조합</p></div></div>`;
+
+  /* ✅ 공유 링크 접속 시: 이미지 저장·테스트 다시하기·공유 버튼 숨기고 CTA만 표시 */
+  if(isShared){
+    document.getElementById('shareArea').style.display='none';
+    document.getElementById('sharedCta').style.display='block';
+    document.getElementById('btnSaveImg').style.display='none';
+  } else {
+    document.getElementById('shareArea').style.display='';
+    document.getElementById('sharedCta').style.display='none';
+    document.getElementById('btnSaveImg').style.display='';
+  }
+
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ✅ 최종 수정: share() — onclone 내 body 직접 이동 방식 */
-async function share(){
+function buildShareURL(){
+  const base = window.location.origin + window.location.pathname;
+  const params = new URLSearchParams();
+  params.set('r', currentResult.type);
+  params.set('ei', currentResult.pct.EI);
+  params.set('sn', currentResult.pct.SN);
+  params.set('tf', currentResult.pct.TF);
+  params.set('jp', currentResult.pct.JP);
+  return base + '?' + params.toString();
+}
+
+function captureImage(){
+  const area=document.getElementById('captureArea');
+  const W=460;
+  const PAD=24;
+
+  return html2canvas(area,{
+    scale:2,
+    backgroundColor:'#FAFAFA',
+    useCORS:true,
+    logging:false,
+    windowWidth:W,
+    onclone:function(clonedDoc){
+      const c=clonedDoc.getElementById('captureArea');
+      clonedDoc.body.innerHTML='';
+      clonedDoc.body.appendChild(c);
+      clonedDoc.body.style.cssText='margin:0;padding:0;background:#FAFAFA;';
+      c.style.cssText='position:relative;width:'+W+'px;max-width:'+W+'px;margin:0;padding:28px '+PAD+'px 16px '+PAD+'px;background:#FAFAFA;box-sizing:border-box;overflow:hidden;';
+      const header=c.querySelector('.result-header');
+      if(header) header.style.cssText='text-align:center;padding-top:32px;margin-bottom:24px;width:100%;';
+      const badge=c.querySelector('.r-badge');
+      if(badge) badge.style.cssText='display:inline-flex;font-size:11px;font-weight:600;color:#FF6B35;background:#FFF4EF;padding:4px 11px;border-radius:100px;margin-bottom:12px;letter-spacing:.5px;';
+      const codeEl=c.querySelector('#rCode');
+      if(codeEl) codeEl.style.cssText='font-size:48px;font-weight:900;letter-spacing:-2px;color:#FF6B35;-webkit-text-fill-color:#FF6B35;background:none;-webkit-background-clip:unset;background-clip:unset;line-height:1.1;margin-bottom:6px;text-align:center;';
+      const nameEl=c.querySelector('#rName');
+      if(nameEl) nameEl.style.cssText='font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:10px;color:#191F28;text-align:center;';
+      const oneEl=c.querySelector('#rOne');
+      if(oneEl) oneEl.style.cssText='font-size:14px;color:#4E5968;line-height:1.7;word-break:keep-all;text-align:center;padding:0 8px;';
+      c.querySelectorAll('.r-card').forEach(card=>{
+        card.style.cssText='background:#FFFFFF;border:1px solid #E5E8EB;border-radius:16px;padding:20px;margin-bottom:12px;width:100%;box-sizing:border-box;';
+      });
+      c.querySelectorAll('.r-card h3').forEach(h=>{
+        h.style.cssText='font-size:14px;font-weight:700;margin-bottom:14px;color:#191F28;';
+      });
+      c.querySelectorAll('.rb-item').forEach(item=>{
+        item.style.cssText='margin-bottom:16px;width:100%;box-sizing:border-box;';
+      });
+      const lastItem=c.querySelector('.rb-item:last-child');
+      if(lastItem) lastItem.style.marginBottom='0';
+      c.querySelectorAll('.rb-labels').forEach(lb=>{
+        lb.style.cssText='display:flex;justify-content:space-between;margin-bottom:5px;font-size:12.5px;font-weight:700;width:100%;';
+      });
+      c.querySelectorAll('.rb-l').forEach(el=>{
+        const isWin=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
+        el.style.cssText='color:'+(isWin?'#191F28':'#8B95A1')+';font-weight:'+(isWin?'700':'500')+';';
+      });
+      c.querySelectorAll('.rb-r').forEach(el=>{
+        const isWin=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('right-win');
+        el.style.cssText='color:'+(isWin?'#191F28':'#8B95A1')+';font-weight:'+(isWin?'700':'500')+';';
+      });
+      c.querySelectorAll('.rb-track').forEach(t=>{
+        t.style.cssText='position:relative;width:100%;height:8px;background:#F2F4F6;border-radius:100px;overflow:hidden;box-sizing:border-box;';
+      });
+      const fillColors={'f-ei':'#FF6B35','f-ei-r':'#6366F1','f-sn':'#F43F5E','f-sn-r':'#8B5CF6','f-tf':'#8B5CF6','f-tf-r':'#EC4899','f-jp':'#10B981','f-jp-r':'#F59E0B'};
+      c.querySelectorAll('.rb-fill').forEach(f=>{
+        const w=f.style.width||f.dataset.t+'%';
+        const isRight=f.classList.contains('from-right');
+        let bg='#FF6B35';
+        for(const cls in fillColors){if(f.classList.contains(cls)){bg=fillColors[cls];break;}}
+        f.style.cssText='position:absolute;top:0;height:100%;border-radius:100px;width:'+w+';background:'+bg+';'+(isRight?'right:0;':'left:0;');
+      });
+      c.querySelectorAll('.rb-pct').forEach(el=>{
+        const isLeft=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
+        el.style.cssText='font-size:11px;margin-top:3px;color:#4E5968;text-align:'+(isLeft?'left':'right')+';';
+      });
+      c.querySelectorAll('.rb-note').forEach(el=>{
+        const isLeft=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
+        el.style.cssText='font-size:11px;color:#FF6B35;margin-top:2px;font-weight:500;text-align:'+(isLeft?'left':'right')+';';
+      });
+    }
+  });
+}
+
+async function saveImage(){
+  gtag('event','sex mbti 이미지 저장');
+  const btn=document.getElementById('btnSaveImg');
+  const origText=btn.innerHTML;
+  btn.innerHTML='이미지 생성 중...';
+  btn.disabled=true;
+
+  try{
+    const canvas=await captureImage();
+    downloadImage(canvas);
+  }catch(e){
+    try{
+      const fallbackCanvas=await html2canvas(document.getElementById('captureArea'),{scale:2,backgroundColor:'#FAFAFA',useCORS:true,logging:false});
+      downloadImage(fallbackCanvas);
+    }catch(e2){
+      alert('이미지 생성에 실패했습니다. 스크린샷을 이용해주세요.');
+    }
+  }finally{
+    btn.innerHTML=origText;
+    btn.disabled=false;
+  }
+}
+
+async function shareResult(){
   gtag('event','sex mbti 결과 공유하기');
 
   const btn=document.getElementById('shareBtn');
   const origText=btn.textContent;
-  btn.textContent='이미지 생성 중...';
+  btn.textContent='준비 중...';
   btn.disabled=true;
 
   try{
-    const area=document.getElementById('captureArea');
-    const W=460;
-    const PAD=24;
-
-
-    const canvas=await html2canvas(area,{
-      scale:2,
-      backgroundColor:'#FAFAFA',
-      useCORS:true,
-      logging:false,
-      windowWidth:W,
-      onclone:function(clonedDoc){
-        const c=clonedDoc.getElementById('captureArea');
-
-        clonedDoc.body.innerHTML='';
-        clonedDoc.body.appendChild(c);
-        clonedDoc.body.style.cssText='margin:0;padding:0;background:#FAFAFA;';
-
-        c.style.cssText='position:relative;width:'+W+'px;max-width:'+W+'px;margin:0;padding:28px '+PAD+'px 16px '+PAD+'px;background:#FAFAFA;box-sizing:border-box;overflow:hidden;';
-
-        const header=c.querySelector('.result-header');
-        if(header) header.style.cssText='text-align:center;padding-top:32px;margin-bottom:24px;width:100%;';
-
-        const badge=c.querySelector('.r-badge');
-        if(badge) badge.style.cssText='display:inline-flex;font-size:11px;font-weight:600;color:#FF6B35;background:#FFF4EF;padding:4px 11px;border-radius:100px;margin-bottom:12px;letter-spacing:.5px;';
-
-        const codeEl=c.querySelector('#rCode');
-        if(codeEl) codeEl.style.cssText='font-size:48px;font-weight:900;letter-spacing:-2px;color:#FF6B35;-webkit-text-fill-color:#FF6B35;background:none;-webkit-background-clip:unset;background-clip:unset;line-height:1.1;margin-bottom:6px;text-align:center;';
-
-        const nameEl=c.querySelector('#rName');
-        if(nameEl) nameEl.style.cssText='font-size:20px;font-weight:800;letter-spacing:-.5px;margin-bottom:10px;color:#191F28;text-align:center;';
-
-        const oneEl=c.querySelector('#rOne');
-        if(oneEl) oneEl.style.cssText='font-size:14px;color:#4E5968;line-height:1.7;word-break:keep-all;text-align:center;padding:0 8px;';
-
-        c.querySelectorAll('.r-card').forEach(card=>{
-          card.style.cssText='background:#FFFFFF;border:1px solid #E5E8EB;border-radius:16px;padding:20px;margin-bottom:12px;width:100%;box-sizing:border-box;';
-        });
-        c.querySelectorAll('.r-card h3').forEach(h=>{
-          h.style.cssText='font-size:14px;font-weight:700;margin-bottom:14px;color:#191F28;';
-        });
-        c.querySelectorAll('.rb-item').forEach(item=>{
-          item.style.cssText='margin-bottom:16px;width:100%;box-sizing:border-box;';
-        });
-        const lastItem=c.querySelector('.rb-item:last-child');
-        if(lastItem) lastItem.style.marginBottom='0';
-
-        c.querySelectorAll('.rb-labels').forEach(lb=>{
-          lb.style.cssText='display:flex;justify-content:space-between;margin-bottom:5px;font-size:12.5px;font-weight:700;width:100%;';
-        });
-        c.querySelectorAll('.rb-l').forEach(el=>{
-          const isWin=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
-          el.style.cssText='color:'+(isWin?'#191F28':'#8B95A1')+';font-weight:'+(isWin?'700':'500')+';';
-        });
-        c.querySelectorAll('.rb-r').forEach(el=>{
-          const isWin=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('right-win');
-          el.style.cssText='color:'+(isWin?'#191F28':'#8B95A1')+';font-weight:'+(isWin?'700':'500')+';';
-        });
-        c.querySelectorAll('.rb-track').forEach(t=>{
-          t.style.cssText='position:relative;width:100%;height:8px;background:#F2F4F6;border-radius:100px;overflow:hidden;box-sizing:border-box;';
-        });
-
-        const fillColors={'f-ei':'#FF6B35','f-ei-r':'#6366F1','f-sn':'#F43F5E','f-sn-r':'#8B5CF6','f-tf':'#8B5CF6','f-tf-r':'#EC4899','f-jp':'#10B981','f-jp-r':'#F59E0B'};
-        c.querySelectorAll('.rb-fill').forEach(f=>{
-          const w=f.style.width||f.dataset.t+'%';
-          const isRight=f.classList.contains('from-right');
-          let bg='#FF6B35';
-          for(const cls in fillColors){if(f.classList.contains(cls)){bg=fillColors[cls];break;}}
-          f.style.cssText='position:absolute;top:0;height:100%;border-radius:100px;width:'+w+';background:'+bg+';'+(isRight?'right:0;':'left:0;');
-        });
-
-        c.querySelectorAll('.rb-pct').forEach(el=>{
-          const isLeft=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
-          el.style.cssText='font-size:11px;margin-top:3px;color:#4E5968;text-align:'+(isLeft?'left':'right')+';';
-        });
-        c.querySelectorAll('.rb-note').forEach(el=>{
-          const isLeft=el.closest('.rb-item')&&el.closest('.rb-item').classList.contains('left-win');
-          el.style.cssText='font-size:11px;color:#FF6B35;margin-top:2px;font-weight:500;text-align:'+(isLeft?'left':'right')+';';
-        });
-
-
-      }
-    });
-
+    const canvas=await captureImage();
     const blob=await new Promise(r=>canvas.toBlob(r,'image/png'));
     const file=new File([blob],'sex-mbti-result.png',{type:'image/png'});
     const code=document.getElementById('rCode').textContent;
     const name=document.getElementById('rName').textContent;
-    const text='나의 SEX MBTI는 '+code+' '+name+'!\n성심리학 이론 기반으로 분석된 나의 친밀한 성향 🔬';
+    const shareURL=buildShareURL();
+    const text='나의 SEX MBTI는 '+code+' '+name+'!\n성심리학 이론 기반으로 분석된 나의 은밀한 성향 🔬\n\n내 결과 보기 👇\n'+shareURL;
 
     if(navigator.canShare&&navigator.canShare({files:[file]})){
-      await navigator.share({title:'SEX MBTI',text:text,files:[file]});
+      await navigator.share({title:'SEX MBTI 결과',text:text,files:[file]});
     }else if(navigator.share){
-      downloadImage(canvas);
-      await navigator.share({title:'SEX MBTI',text:text,url:location.href});
+      await navigator.share({title:'SEX MBTI 결과',text:text,url:shareURL});
     }else{
+      await copyToClipboard(shareURL);
       downloadImage(canvas);
-      alert('결과 이미지가 저장되었습니다!');
+      alert('결과 링크가 복사되고 이미지가 저장되었습니다!');
     }
-
   }catch(e){
     if(e.name!=='AbortError'){
       try{
-        const fallbackCanvas=await html2canvas(document.getElementById('captureArea'),{scale:2,backgroundColor:'#FAFAFA',useCORS:true,logging:false});
-        downloadImage(fallbackCanvas);
-        alert('결과 이미지가 저장되었습니다!');
+        const shareURL=buildShareURL();
+        await copyToClipboard(shareURL);
+        alert('결과 링크가 클립보드에 복사되었습니다!\n'+shareURL);
       }catch(e2){
-        alert('이미지 생성에 실패했습니다. 스크린샷을 이용해주세요.');
+        alert('공유에 실패했습니다. 스크린샷을 이용해주세요.');
       }
     }
   }finally{
     btn.textContent=origText;
     btn.disabled=false;
+  }
+}
+
+async function copyToClipboard(text){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    await navigator.clipboard.writeText(text);
+  }else{
+    const ta=document.createElement('textarea');
+    ta.value=text;
+    ta.style.cssText='position:fixed;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
   }
 }
 
@@ -685,6 +766,33 @@ function downloadImage(canvas){
   link.href=canvas.toDataURL('image/png');
   link.click();
 }
+
+(function checkSharedResult(){
+  const params=new URLSearchParams(window.location.search);
+  const type=params.get('r');
+  const ei=params.get('ei');
+  const sn=params.get('sn');
+  const tf=params.get('tf');
+  const jp=params.get('jp');
+
+  if(type && ei && sn && tf && jp && TD[type]){
+    const pct={EI:parseInt(ei),SN:parseInt(sn),TF:parseInt(tf),JP:parseInt(jp)};
+    const valid=['EI','SN','TF','JP'].every(a=>pct[a]>=1&&pct[a]<=99);
+    if(!valid) return;
+
+    const strength={};
+    ['EI','SN','TF','JP'].forEach(a=>{
+      const dist=Math.abs(pct[a]-50);
+      if(dist<=5)strength[a]='미약한';
+      else if(dist<=15)strength[a]='약한';
+      else if(dist<=30)strength[a]='분명한';
+      else strength[a]='뚜렷한';
+    });
+
+    hide('screen-intro');
+    showR(type,pct,strength,true);
+  }
+})();
 
 document.addEventListener('keydown',e=>{
   if(!document.getElementById('screen-question').classList.contains('active'))return;
